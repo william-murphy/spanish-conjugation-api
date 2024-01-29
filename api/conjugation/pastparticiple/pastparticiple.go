@@ -18,7 +18,7 @@ var irregulars = map[string]string{
 	"ver":      "visto",
 }
 
-func GetPastParticiple(verb string) string {
+func CreatePastParticiple(verb string) string {
 	irreg := utils.IsIrregular(irregulars, verb)
 
 	if irreg != "" {
