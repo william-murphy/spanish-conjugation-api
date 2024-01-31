@@ -5,7 +5,25 @@ import (
 	"strings"
 )
 
-var Vowels = []string{"a", "e", "i", "o", "u"}
+var vowels = []string{"a", "e", "i", "o", "u"}
+
+func GetVowels(exclude ...string) []string {
+	// Create a map to store elements to be removed
+	elementsToRemoveMap := make(map[string]struct{})
+	for _, element := range exclude {
+		elementsToRemoveMap[element] = struct{}{}
+	}
+
+	// Create a new slice to store the elements not in elementsToRemoveMap
+	result := make([]string, 0, len(vowels))
+	for _, element := range vowels {
+		if _, exists := elementsToRemoveMap[element]; !exists {
+			result = append(result, element)
+		}
+	}
+
+	return result
+}
 
 func ArrayContainsString(arr []string, target string) bool {
 	for _, s := range arr {

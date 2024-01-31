@@ -38,7 +38,7 @@ func gerundEnding(stem string, ending string) string {
 	if ending == "ar" {
 		return "ando"
 	} else {
-		if stem == "" || utils.ArrayContainsString(utils.Vowels, stem[len(stem)-1:]) {
+		if stem == "" || utils.ArrayContainsString(utils.GetVowels(), stem[len(stem)-1:]) {
 			return "yendo"
 		} else {
 			return "iendo"
