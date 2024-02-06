@@ -1,6 +1,9 @@
 package pastparticiple
 
-import "spanish-conjugation-api/api/utils"
+import (
+	"spanish-conjugation-api/api/utils"
+	"strings"
+)
 
 var irregulars = map[string]string{
 	"abrir":    "abierto",
@@ -15,14 +18,22 @@ var irregulars = map[string]string{
 	"hacer":    "hecho",
 	"solver":   "suelto",
 	"volver":   "vuelto",
-	"ver":      "visto",
 }
 
 func CreatePastParticiple(verb string) string {
-	irreg := utils.IsIrregular(irregulars, verb)
 
-	if irreg != "" {
-		return irreg
+	// Check if ver
+	if verb == "ver" {
+		return "visto"
+	}
+
+	// Check if irregular
+	for key, value := range irregulars {
+		if strings.HasSuffix(verb, key) {
+			index := len(verb) - len(key)
+			beginning := verb[:index]
+			return beginning + value
+		}
 	}
 
 	stem, ending := utils.SplitVerb(verb)

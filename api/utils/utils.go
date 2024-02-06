@@ -5,24 +5,28 @@ import (
 	"strings"
 )
 
-var vowels = []string{"a", "e", "i", "o", "u"}
+var Vowels = []string{"a", "e", "i", "o", "u"}
 
-func GetVowels(exclude ...string) []string {
-	// Create a map to store elements to be removed
-	elementsToRemoveMap := make(map[string]struct{})
-	for _, element := range exclude {
-		elementsToRemoveMap[element] = struct{}{}
+func ChangeStem(base, toReplace, replaceWith string) string {
+	lastIndex := strings.LastIndex(base, toReplace)
+
+	if lastIndex == -1 {
+		return base
 	}
 
-	// Create a new slice to store the elements not in elementsToRemoveMap
-	result := make([]string, 0, len(vowels))
-	for _, element := range vowels {
-		if _, exists := elementsToRemoveMap[element]; !exists {
-			result = append(result, element)
+	result := base[:lastIndex] + replaceWith + base[lastIndex+len(toReplace):]
+	return result
+}
+
+func HasOneOfMultipleSuffixes(base string, suffixes ...string) bool {
+	for _, suffix := range suffixes {
+		baseLen := len(base)
+		suffixLen := len(suffix)
+		if baseLen >= suffixLen && base[baseLen-suffixLen:] == suffix {
+			return true
 		}
 	}
-
-	return result
+	return false
 }
 
 func ArrayContainsString(arr []string, target string) bool {
@@ -32,17 +36,6 @@ func ArrayContainsString(arr []string, target string) bool {
 		}
 	}
 	return false
-}
-
-func IsIrregular(input map[string]string, target string) string {
-	for key, value := range input {
-		if strings.HasSuffix(target, key) {
-			index := len(target) - len(key)
-			beginning := target[:index]
-			return beginning + value
-		}
-	}
-	return ""
 }
 
 func ContainsOnlyLowerCase(s string) bool {
