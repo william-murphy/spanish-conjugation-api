@@ -4,7 +4,7 @@ import (
 	"spanish-conjugation-api/api/utils"
 )
 
-func gerundStem(verb string, base string) string {
+func getGerundStem(verb string, base string) string {
 	// o -> u
 	if utils.HasOneOfMultipleSuffixes(verb, "oder", "ormir", "orir") {
 		return utils.ChangeStem(base, "o", "u")
@@ -18,7 +18,7 @@ func gerundStem(verb string, base string) string {
 	return base
 }
 
-func gerundEnding(base string, ending string) string {
+func getGerundEnding(base string, ending string) string {
 	if ending == "ar" {
 		return "ando"
 	} else {
@@ -32,7 +32,7 @@ func gerundEnding(base string, ending string) string {
 
 func CreateGerund(verb string) string {
 	base, ending := utils.SplitVerb(verb)
-	stem := gerundStem(verb, base)
-	newEnding := gerundEnding(stem, ending)
+	stem := getGerundStem(verb, base)
+	newEnding := getGerundEnding(stem, ending)
 	return stem + newEnding
 }

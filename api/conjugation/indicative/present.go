@@ -5,40 +5,39 @@ import (
 	"strings"
 )
 
-var presentSer = map[string]string{
-	"yo":       "soy",
-	"tu":       "eres",
-	"usted":    "es",
-	"nosotros": "somos",
-	"vosotros": "soi",
-	"ustedes":  "son",
-}
-
-var presentHaber = map[string]string{
-	"yo":       "he",
-	"tu":       "has",
-	"usted":    "ha",
-	"nosotros": "hemos",
-	"vosotros": "habeis",
-	"ustedes":  "han",
-}
-
-var presentIr = map[string]string{
-	"yo":       "voy",
-	"tu":       "vas",
-	"usted":    "va",
-	"nosotros": "vamos",
-	"vosotros": "vais",
-	"ustedes":  "van",
-}
-
-var presentEstar = map[string]string{
-	"yo":       "estoy",
-	"tu":       "estás",
-	"usted":    "está",
-	"nosotros": "estamos",
-	"vosotros": "estáis",
-	"ustedes":  "están",
+var presentIrregulars = map[string]map[string]string{
+	"ser": {
+		"yo":       "soy",
+		"tu":       "eres",
+		"usted":    "es",
+		"nosotros": "somos",
+		"vosotros": "soi",
+		"ustedes":  "son",
+	},
+	"ir": {
+		"yo":       "voy",
+		"tu":       "vas",
+		"usted":    "va",
+		"nosotros": "vamos",
+		"vosotros": "vais",
+		"ustedes":  "van",
+	},
+	"haber": {
+		"yo":       "he",
+		"tu":       "has",
+		"usted":    "ha",
+		"nosotros": "hemos",
+		"vosotros": "habeis",
+		"ustedes":  "han",
+	},
+	"estar": {
+		"yo":       "estoy",
+		"tu":       "estás",
+		"usted":    "está",
+		"nosotros": "estamos",
+		"vosotros": "estáis",
+		"ustedes":  "están",
+	},
 }
 
 var irregularYo = map[string]string{
@@ -48,31 +47,31 @@ var irregularYo = map[string]string{
 	"caber": "quepo",
 }
 
-var presentArEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "as",
-	"usted":    "a",
-	"nosotros": "amos",
-	"vosotros": "áis",
-	"ustedes":  "an",
-}
-
-var presentErEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "es",
-	"usted":    "e",
-	"nosotros": "emos",
-	"vosotros": "éis",
-	"ustedes":  "en",
-}
-
-var presentIrEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "es",
-	"usted":    "e",
-	"nosotros": "imos",
-	"vosotros": "ís",
-	"ustedes":  "en",
+var presentEndings = map[string]map[string]string{
+	"ar": {
+		"yo":       "o",
+		"tu":       "as",
+		"usted":    "a",
+		"nosotros": "amos",
+		"vosotros": "áis",
+		"ustedes":  "an",
+	},
+	"er": {
+		"yo":       "o",
+		"tu":       "es",
+		"usted":    "e",
+		"nosotros": "emos",
+		"vosotros": "éis",
+		"ustedes":  "en",
+	},
+	"ir": {
+		"yo":       "o",
+		"tu":       "es",
+		"usted":    "e",
+		"nosotros": "imos",
+		"vosotros": "ís",
+		"ustedes":  "en",
+	},
 }
 
 func getIrregularPresentYoStem(verb string, base string) string {
@@ -189,25 +188,13 @@ func GetPresentStem(verb string, base string, subject string) string {
 }
 
 func GetPresentEnding(ending string, subject string) string {
-	if ending == "ar" {
-		return presentArEndings[subject]
-	} else if ending == "er" {
-		return presentErEndings[subject]
-	} else {
-		return presentIrEndings[subject]
-	}
+	return presentEndings[ending][subject]
 }
 
 func ConjugatePresent(verb string, subject string) string {
-	switch verb {
-	case "ser":
-		return presentSer[subject]
-	case "ir":
-		return presentIr[subject]
-	case "haber":
-		return presentHaber[subject]
-	case "estar":
-		return presentEstar[subject]
+	irregular, exists := presentIrregulars[verb][subject]
+	if exists {
+		return irregular
 	}
 
 	value, exists := irregularYo[verb]

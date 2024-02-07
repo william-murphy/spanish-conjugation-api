@@ -4,68 +4,68 @@ import (
 	"spanish-conjugation-api/api/utils"
 )
 
-var imperfectSer = map[string]string{
-	"yo":       "era",
-	"tu":       "eras",
-	"usted":    "era",
-	"nosotros": "éramos",
-	"vosotros": "erais",
-	"ustedes":  "eran",
+var imperfectIrregulars = map[string]map[string]string{
+	"ser": {
+		"yo":       "era",
+		"tu":       "eras",
+		"usted":    "era",
+		"nosotros": "éramos",
+		"vosotros": "erais",
+		"ustedes":  "eran",
+	},
+	"ir": {
+		"yo":       "iba",
+		"tu":       "ibas",
+		"usted":    "iba",
+		"nosotros": "íbamos",
+		"vosotros": "ibais",
+		"ustedes":  "iban",
+	},
+	"ver": {
+		"yo":       "veía",
+		"tu":       "veías",
+		"usted":    "veía",
+		"nosotros": "veíamos",
+		"vosotros": "veías",
+		"ustedes":  "veían",
+	},
 }
 
-var imperfectIr = map[string]string{
-	"yo":       "iba",
-	"tu":       "ibas",
-	"usted":    "iba",
-	"nosotros": "íbamos",
-	"vosotros": "ibais",
-	"ustedes":  "iban",
-}
-
-var imperfectVer = map[string]string{
-	"yo":       "veía",
-	"tu":       "veías",
-	"usted":    "veía",
-	"nosotros": "veíamos",
-	"vosotros": "veías",
-	"ustedes":  "veían",
-}
-
-var imperfectArEndings = map[string]string{
-	"yo":       "aba",
-	"tu":       "abas",
-	"usted":    "aba",
-	"nosotros": "ábamos",
-	"vosotros": "abais",
-	"ustedes":  "aban",
-}
-
-var imperfectErIrEndings = map[string]string{
-	"yo":       "ía",
-	"tu":       "ías",
-	"usted":    "ía",
-	"nosotros": "íamos",
-	"vosotros": "ías",
-	"ustedes":  "ían",
+var imperfectEndings = map[string]map[string]string{
+	"ar": {
+		"yo":       "aba",
+		"tu":       "abas",
+		"usted":    "aba",
+		"nosotros": "ábamos",
+		"vosotros": "abais",
+		"ustedes":  "aban",
+	},
+	"er": {
+		"yo":       "ía",
+		"tu":       "ías",
+		"usted":    "ía",
+		"nosotros": "íamos",
+		"vosotros": "ías",
+		"ustedes":  "ían",
+	},
+	"ir": {
+		"yo":       "ía",
+		"tu":       "ías",
+		"usted":    "ía",
+		"nosotros": "íamos",
+		"vosotros": "ías",
+		"ustedes":  "ían",
+	},
 }
 
 func GetImperfectEnding(ending string, subject string) string {
-	// TODO - add error handling to functions like these
-	if ending == "ar" {
-		return imperfectArEndings[subject]
-	} else {
-		return imperfectErIrEndings[subject]
-	}
+	return imperfectEndings[ending][subject]
 }
 
 func ConjugateImperfect(verb string, subject string) string {
-	switch verb {
-	case "ser":
-		return imperfectSer[subject]
-	case "ir":
-		return imperfectIr[subject]
-	case "ver":
-		return imperfectVer[subject]
+	irregular, exists := imperfectIrregulars[verb][subject]
+	if exists {
+		return irregular
 	}
 
 	base, ending := utils.SplitVerb(verb)
