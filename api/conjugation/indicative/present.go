@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var ser = map[string]string{
+var presentSer = map[string]string{
 	"yo":       "soy",
 	"tu":       "eres",
 	"usted":    "es",
@@ -14,7 +14,7 @@ var ser = map[string]string{
 	"ustedes":  "son",
 }
 
-var haber = map[string]string{
+var presentHaber = map[string]string{
 	"yo":       "he",
 	"tu":       "has",
 	"usted":    "ha",
@@ -23,7 +23,7 @@ var haber = map[string]string{
 	"ustedes":  "han",
 }
 
-var ir = map[string]string{
+var presentIr = map[string]string{
 	"yo":       "voy",
 	"tu":       "vas",
 	"usted":    "va",
@@ -194,11 +194,11 @@ func GetPresentEnding(ending string, subject string) string {
 func ConjugatePresent(verb string, subject string) string {
 	switch verb {
 	case "ser":
-		return ser[subject]
+		return presentSer[subject]
 	case "ir":
-		return ir[subject]
+		return presentIr[subject]
 	case "haber":
-		return haber[subject]
+		return presentHaber[subject]
 	}
 
 	value, exists := irregularYo[verb]

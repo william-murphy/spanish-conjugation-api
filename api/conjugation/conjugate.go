@@ -23,9 +23,12 @@ func conjugateIndicative(verb string, tense string, subject string) string {
 		return indicative.ConjugateNearFuture(verb, subject)
 	case "presentperfect":
 		return indicative.ConjugatePresentPerfect(verb, subject)
+	case "imperfect":
+		return indicative.ConjugateImperfect(verb, subject)
+	case "pluperfect":
+		return indicative.ConjugatePluperfect(verb, subject)
 	}
 
-	// default
 	return "Invalid tense given."
 }
 
