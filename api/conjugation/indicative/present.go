@@ -32,11 +32,19 @@ var presentIr = map[string]string{
 	"ustedes":  "van",
 }
 
+var presentEstar = map[string]string{
+	"yo":       "estoy",
+	"tu":       "estás",
+	"usted":    "está",
+	"nosotros": "estamos",
+	"vosotros": "estáis",
+	"ustedes":  "están",
+}
+
 var irregularYo = map[string]string{
 	"saber": "se",
 	"dar":   "doy",
 	"ver":   "veo",
-	"estar": "estoy",
 	"caber": "quepo",
 }
 
@@ -67,7 +75,7 @@ var presentIrEndings = map[string]string{
 	"ustedes":  "en",
 }
 
-func getIrregularYoStem(verb string, base string) string {
+func getIrregularPresentYoStem(verb string, base string) string {
 	// quir verbs
 	if strings.HasSuffix(verb, "quir") {
 		return utils.ChangeStem(base, "qu", "c")
@@ -128,10 +136,10 @@ func getIrregularYoStem(verb string, base string) string {
 		return base[:len(base)-1] + "zc"
 	}
 
-	return getIrregularStem(verb, base)
+	return getIrregularPresentStem(verb, base)
 }
 
-func getIrregularStem(verb string, base string) string {
+func getIrregularPresentStem(verb string, base string) string {
 	// -uir verbs
 	if utils.HasOneOfMultipleSuffixes(verb, "oir", "uir") {
 		return base + "y"
@@ -172,11 +180,11 @@ func getIrregularStem(verb string, base string) string {
 
 func GetPresentStem(verb string, base string, subject string) string {
 	if subject == "yo" {
-		return getIrregularYoStem(verb, base)
+		return getIrregularPresentYoStem(verb, base)
 	} else if subject == "nosotros" || subject == "vosotros" {
 		return base
 	} else {
-		return getIrregularStem(verb, base)
+		return getIrregularPresentStem(verb, base)
 	}
 }
 
@@ -198,6 +206,8 @@ func ConjugatePresent(verb string, subject string) string {
 		return presentIr[subject]
 	case "haber":
 		return presentHaber[subject]
+	case "estar":
+		return presentEstar[subject]
 	}
 
 	value, exists := irregularYo[verb]
