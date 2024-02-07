@@ -40,6 +40,33 @@ var irregularYo = map[string]string{
 	"caber": "quepo",
 }
 
+var presentArEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "as",
+	"usted":    "a",
+	"nosotros": "amos",
+	"vosotros": "áis",
+	"ustedes":  "an",
+}
+
+var presentErEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "es",
+	"usted":    "e",
+	"nosotros": "emos",
+	"vosotros": "éis",
+	"ustedes":  "en",
+}
+
+var presentIrEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "es",
+	"usted":    "e",
+	"nosotros": "imos",
+	"vosotros": "ís",
+	"ustedes":  "en",
+}
+
 func getIrregularYoStem(verb string, base string) string {
 	// quir verbs
 	if strings.HasSuffix(verb, "quir") {
@@ -151,33 +178,6 @@ func GetPresentStem(verb string, base string, subject string) string {
 	} else {
 		return getIrregularStem(verb, base)
 	}
-}
-
-var presentArEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "as",
-	"usted":    "a",
-	"nosotros": "amos",
-	"vosotros": "áis",
-	"ustedes":  "an",
-}
-
-var presentErEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "es",
-	"usted":    "e",
-	"nosotros": "emos",
-	"vosotros": "éis",
-	"ustedes":  "en",
-}
-
-var presentIrEndings = map[string]string{
-	"yo":       "o",
-	"tu":       "es",
-	"usted":    "e",
-	"nosotros": "imos",
-	"vosotros": "ís",
-	"ustedes":  "en",
 }
 
 func GetPresentEnding(ending string, subject string) string {
