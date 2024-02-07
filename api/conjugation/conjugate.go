@@ -1,6 +1,9 @@
 package conjugation
 
-import "spanish-conjugation-api/api/conjugation/indicative"
+import (
+	"spanish-conjugation-api/api/conjugation/indicative"
+	"spanish-conjugation-api/api/conjugation/subjunctive"
+)
 
 func Conjugate(verb string, mood string, tense string, subject string) string {
 	// TODO - decision trees?? lots of if else statements
@@ -43,11 +46,18 @@ func conjugateIndicative(verb string, tense string, subject string) string {
 		return indicative.ConjugateConditionalProgressive(verb, subject)
 	}
 
-	return "Invalid tense given."
+	return "Invalid tense given for indicative mood."
 }
 
 func conjugateSubjunctive(verb string, tense string, subject string) string {
-	return ""
+	switch tense {
+	case "present":
+		return subjunctive.ConjugatePresent(verb, subject)
+	case "presentperfect":
+		return subjunctive.ConjugatePresentPerfect(verb, subject)
+	}
+
+	return "Invalid tense given for subjunctive mood."
 }
 
 func conjugateImperative(verb string, subject string) string {

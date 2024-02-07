@@ -43,8 +43,6 @@ var presentIrregulars = map[string]map[string]string{
 var irregularYo = map[string]string{
 	"saber": "se",
 	"dar":   "doy",
-	"ver":   "veo",
-	"caber": "quepo",
 }
 
 var presentEndings = map[string]map[string]string{
@@ -74,79 +72,89 @@ var presentEndings = map[string]map[string]string{
 	},
 }
 
-func getIrregularPresentYoStem(verb string, base string) string {
+func GetIrregularPresentYoStem(verb string, base string) (string, bool) {
+	// ver
+	if verb == "ver" {
+		return "ve", true
+	}
+
+	// caber
+	if verb == "caber" {
+		return "quep", true
+	}
+
+	// reir
+	if strings.HasSuffix(verb, "reir") {
+		return utils.ChangeStem(base, "e", "í"), true
+	}
+
 	// quir verbs
 	if strings.HasSuffix(verb, "quir") {
-		return utils.ChangeStem(base, "qu", "c")
+		return utils.ChangeStem(base, "qu", "c"), true
 	}
 
 	// -ger and -gir verbs
 	if utils.HasOneOfMultipleSuffixes(verb, "ger", "gir") {
-		return base[:len(base)-1] + "j"
+		return base[:len(base)-1] + "j", true
 	}
 
 	// -eguir verbs
 	if strings.HasSuffix(verb, "eguir") {
-		return base[:len(base)-3] + "ig"
+		return base[:len(base)-3] + "ig", true
 	}
 
 	// -guir verbs
 	if strings.HasSuffix(verb, "guir") {
-		return base[:len(base)-1]
+		return base[:len(base)-1], true
+	}
+
+	// -uir verbs
+	if strings.HasSuffix(verb, "uir") {
+		return base + "y", true
 	}
 
 	// -igo verbs
 	if strings.HasSuffix(verb, "decir") {
-		return base[:len(base)-2] + "ig"
+		return base[:len(base)-2] + "ig", true
 	}
 
 	// -ago verbs
 	if utils.HasOneOfMultipleSuffixes(verb, "hacer", "facer") {
-		return base[:len(base)-1] + "g"
+		return base[:len(base)-1] + "g", true
 	}
 
-	// -asgo verbs
-	if strings.HasSuffix(verb, "asir") {
-		return base + "g"
-	}
-
-	// -algo verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "salir", "valer") {
-		return base + "g"
+	// -go verbs
+	if utils.HasOneOfMultipleSuffixes(verb, "salir", "valer", "tener", "poner", "asir") {
+		return base + "g", true
 	}
 
 	// -oir and -aer verbs
 	if utils.HasOneOfMultipleSuffixes(verb, "oir", "aer") {
-		return base + "ig"
-	}
-
-	// -engo and -ongo verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "tener", "poner") {
-		return base + "g"
+		return base + "ig", true
 	}
 
 	// consonant + -cer and -cir verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "cer", "cir") && !utils.ArrayContainsString(utils.Vowels, base[:len(base)-2]) {
-		return base[:len(base)-1] + "z"
+	if utils.HasOneOfMultipleSuffixes(verb, "cer", "cir") && !utils.ArrayContainsString(utils.Vowels, string(base[len(base)-2])) {
+		return base[:len(base)-1] + "z", true
 	}
 
 	// vowel + -cer and -cir verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "cer", "cir") && utils.ArrayContainsString(utils.Vowels, base[:len(base)-2]) {
-		return base[:len(base)-1] + "zc"
+	if utils.HasOneOfMultipleSuffixes(verb, "cer", "cir") && utils.ArrayContainsString(utils.Vowels, string(base[len(base)-2])) {
+		return base[:len(base)-1] + "zc", true
 	}
 
-	return getIrregularPresentStem(verb, base)
+	return base, false
 }
 
-func getIrregularPresentStem(verb string, base string) string {
-	// -uir verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "oir", "uir") {
-		return base + "y"
-	}
-
+func GetIrregularPresentStem(verb string, base string) string {
 	// oler
 	if verb == "oler" {
 		return utils.ChangeStem(base, "o", "hue")
+	}
+
+	// -uir verbs
+	if utils.HasOneOfMultipleSuffixes(verb, "oir", "uir") {
+		return base + "y"
 	}
 
 	// e -> ie
@@ -179,16 +187,14 @@ func getIrregularPresentStem(verb string, base string) string {
 
 func GetPresentStem(verb string, base string, subject string) string {
 	if subject == "yo" {
-		return getIrregularPresentYoStem(verb, base)
+		stem, irregular := GetIrregularPresentYoStem(verb, base)
+		if irregular {
+			return stem
+		}
 	} else if subject == "nosotros" || subject == "vosotros" {
 		return base
-	} else {
-		return getIrregularPresentStem(verb, base)
 	}
-}
-
-func GetPresentEnding(ending string, subject string) string {
-	return presentEndings[ending][subject]
+	return GetIrregularPresentStem(verb, base)
 }
 
 func ConjugatePresent(verb string, subject string) string {
@@ -205,7 +211,7 @@ func ConjugatePresent(verb string, subject string) string {
 	base, ending := utils.SplitVerb(verb)
 
 	stem := GetPresentStem(verb, base, subject)
-	newEnding := GetPresentEnding(ending, subject)
+	newEnding := presentEndings[ending][subject]
 
 	return stem + newEnding
 }
