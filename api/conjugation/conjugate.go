@@ -29,6 +29,18 @@ func conjugateIndicative(verb string, tense string, subject string) string {
 		return indicative.ConjugatePluperfect(verb, subject)
 	case "pastprogressive":
 		return indicative.ConjugatePastProgressive(verb, subject)
+	case "future":
+		return indicative.ConjugateFuture(verb, subject)
+	case "futureperfect":
+		return indicative.ConjugateFuturePerfect(verb, subject)
+	case "futureprogressive":
+		return indicative.ConjugateFutureProgressive(verb, subject)
+	case "conditional":
+		return indicative.ConjugateConditional(verb, subject)
+	case "conditionalperfect":
+		return indicative.ConjugateConditionalPerfect(verb, subject)
+	case "conditionalprogressive":
+		return indicative.ConjugateConditionalProgressive(verb, subject)
 	}
 
 	return "Invalid tense given."
