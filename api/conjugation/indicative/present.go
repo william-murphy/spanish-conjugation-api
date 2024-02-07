@@ -41,14 +41,24 @@ var irregularYo = map[string]string{
 }
 
 func getIrregularYoStem(verb string, base string) string {
+	// quir verbs
+	if strings.HasSuffix(verb, "quir") {
+		return utils.ChangeStem(base, "qu", "c")
+	}
+
 	// -ger and -gir verbs
 	if utils.HasOneOfMultipleSuffixes(verb, "ger", "gir") {
 		return base[:len(base)-1] + "j"
 	}
 
-	// -guir verbs
+	// -eguir verbs
 	if strings.HasSuffix(verb, "eguir") {
 		return base[:len(base)-3] + "ig"
+	}
+
+	// -guir verbs
+	if strings.HasSuffix(verb, "guir") {
+		return base[:len(base)-1]
 	}
 
 	// -igo verbs
@@ -95,14 +105,9 @@ func getIrregularYoStem(verb string, base string) string {
 }
 
 func getIrregularStem(verb string, base string) string {
-	// u -> uy
-	if strings.HasSuffix(verb, "uir") {
-		return utils.ChangeStem(base, "u", "uy")
-	}
-
-	// o -> oy
-	if strings.HasSuffix(verb, "oir") {
-		return utils.ChangeStem(base, "o", "oy")
+	// -uir verbs
+	if utils.HasOneOfMultipleSuffixes(verb, "oir", "uir") {
+		return base + "y"
 	}
 
 	// oler
@@ -148,46 +153,40 @@ func GetPresentStem(verb string, base string, subject string) string {
 	}
 }
 
+var presentArEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "as",
+	"usted":    "a",
+	"nosotros": "amos",
+	"vosotros": "áis",
+	"ustedes":  "an",
+}
+
+var presentErEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "es",
+	"usted":    "e",
+	"nosotros": "emos",
+	"vosotros": "éis",
+	"ustedes":  "en",
+}
+
+var presentIrEndings = map[string]string{
+	"yo":       "o",
+	"tu":       "es",
+	"usted":    "e",
+	"nosotros": "imos",
+	"vosotros": "ís",
+	"ustedes":  "en",
+}
+
 func GetPresentEnding(ending string, subject string) string {
-	switch subject {
-	case "yo":
-		return "o"
-	case "tu":
-		if ending == "ar" {
-			return "as"
-		} else {
-			return "es"
-		}
-	case "usted":
-		if ending == "ar" {
-			return "a"
-		} else {
-			return "e"
-		}
-	case "nosotros":
-		if ending == "ar" {
-			return "amos"
-		} else if ending == "er" {
-			return "emos"
-		} else {
-			return "imos"
-		}
-	case "vosotros":
-		if ending == "ar" {
-			return "ais"
-		} else if ending == "er" {
-			return "eis"
-		} else {
-			return "is"
-		}
-	case "ustedes":
-		if ending == "ar" {
-			return "an"
-		} else {
-			return "en"
-		}
-	default:
-		return ""
+	if ending == "ar" {
+		return presentArEndings[subject]
+	} else if ending == "er" {
+		return presentErEndings[subject]
+	} else {
+		return presentIrEndings[subject]
 	}
 }
 

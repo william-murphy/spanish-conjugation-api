@@ -31,48 +31,31 @@ var imperfectVer = map[string]string{
 	"ustedes":  "veían",
 }
 
+var imperfectArEndings = map[string]string{
+	"yo":       "aba",
+	"tu":       "abas",
+	"usted":    "aba",
+	"nosotros": "ábamos",
+	"vosotros": "abais",
+	"ustedes":  "aban",
+}
+
+var imperfectErIrEndings = map[string]string{
+	"yo":       "ía",
+	"tu":       "ías",
+	"usted":    "ía",
+	"nosotros": "íamos",
+	"vosotros": "ías",
+	"ustedes":  "ían",
+}
+
 func GetImperfectEnding(ending string, subject string) string {
 	// TODO - add error handling to functions like these
-
-	switch subject {
-	case "yo":
-		if ending == "ar" {
-			return "aba"
-		} else {
-			return "ía"
-		}
-	case "tu":
-		if ending == "ar" {
-			return "abas"
-		} else {
-			return "ías"
-		}
-	case "usted":
-		if ending == "ar" {
-			return "aba"
-		} else {
-			return "ía"
-		}
-	case "nosotros":
-		if ending == "ar" {
-			return "ábamos"
-		} else {
-			return "íamos"
-		}
-	case "vosotros":
-		if ending == "ar" {
-			return "abais"
-		} else {
-			return "íais"
-		}
-	case "ustedes":
-		if ending == "ar" {
-			return "aban"
-		} else {
-			return "ían"
-		}
+	if ending == "ar" {
+		return imperfectArEndings[subject]
+	} else {
+		return imperfectErIrEndings[subject]
 	}
-	return "Invalid verb given."
 }
 
 func ConjugateImperfect(verb string, subject string) string {
