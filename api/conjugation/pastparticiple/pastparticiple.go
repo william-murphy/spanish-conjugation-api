@@ -30,9 +30,7 @@ func CreatePastParticiple(verb string) string {
 	// Check if irregular
 	for key, value := range irregulars {
 		if strings.HasSuffix(verb, key) {
-			index := len(verb) - len(key)
-			beginning := verb[:index]
-			return beginning + value
+			return verb[:len(verb)-len(key)] + value
 		}
 	}
 

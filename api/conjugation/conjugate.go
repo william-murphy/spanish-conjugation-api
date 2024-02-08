@@ -45,6 +45,8 @@ func conjugateIndicative(verb string, tense string, subject string) string {
 		return indicative.ConjugateConditionalPerfect(verb, subject)
 	case "conditionalprogressive":
 		return indicative.ConjugateConditionalProgressive(verb, subject)
+	case "preterite":
+		return indicative.ConjugatePreterite(verb, subject)
 	}
 
 	return "Invalid tense given for indicative mood."
@@ -56,6 +58,10 @@ func conjugateSubjunctive(verb string, tense string, subject string) string {
 		return subjunctive.ConjugatePresent(verb, subject)
 	case "presentperfect":
 		return subjunctive.ConjugatePresentPerfect(verb, subject)
+	case "imperfect":
+		return subjunctive.ConjugateImperfect(verb, subject)
+	case "pluperfect":
+		return subjunctive.ConjugatePluperfect(verb, subject)
 	}
 
 	return "Invalid tense given for subjunctive mood."
