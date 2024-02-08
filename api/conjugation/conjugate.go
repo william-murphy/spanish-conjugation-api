@@ -1,6 +1,7 @@
 package conjugation
 
 import (
+	"spanish-conjugation-api/api/conjugation/imperative"
 	"spanish-conjugation-api/api/conjugation/indicative"
 	"spanish-conjugation-api/api/conjugation/subjunctive"
 )
@@ -61,5 +62,18 @@ func conjugateSubjunctive(verb string, tense string, subject string) string {
 }
 
 func conjugateImperative(verb string, subject string) string {
-	return ""
+	switch subject {
+	case "tu":
+		return imperative.ConjugateTu(verb)
+	case "vosotros":
+		return imperative.ConjugateVosotros(verb)
+	case "usted":
+		return imperative.ConjugateUsted(verb)
+	case "ustedes":
+		return imperative.ConjugateUstedes(verb)
+	case "nosotros":
+		return imperative.ConjugateNosotros(verb)
+	}
+
+	return "Invalid subject given for imperative mood."
 }

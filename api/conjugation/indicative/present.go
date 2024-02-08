@@ -124,7 +124,7 @@ func GetIrregularPresentYoStem(verb string, base string) (string, bool) {
 	}
 
 	// -go verbs
-	if utils.HasOneOfMultipleSuffixes(verb, "salir", "valer", "tener", "poner", "asir") {
+	if utils.HasOneOfMultipleSuffixes(verb, "salir", "valer", "tener", "poner", "asir", "venir") {
 		return base + "g", true
 	}
 
