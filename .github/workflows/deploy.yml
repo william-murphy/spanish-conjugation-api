@@ -1,0 +1,19 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Stop the current docker container
+      run: docker compose down
+    - name: Rebuild and start container with changes
+      run: docker compose up --build -d
+    - name: Clean up docker containers
+      run: docker system prune -f
+    - name: Clean up docker volumes
+      run: docker volume prune -f
