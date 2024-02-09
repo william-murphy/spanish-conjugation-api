@@ -6,10 +6,9 @@ import (
 )
 
 var irregulars = map[string]string{
-	"abrir":    "abierto",
+	"brir":     "bierto",
 	"morir":    "muerto",
 	"poner":    "puesto",
-	"cubrir":   "cubierto",
 	"decir":    "dicho",
 	"romper":   "roto",
 	"escribir": "escrito",
@@ -39,6 +38,9 @@ func CreatePastParticiple(verb string) string {
 	if ending == "ar" {
 		return stem + "ado"
 	} else {
+		if utils.HasOneOfMultipleSuffixes(stem, "a", "e", "o") {
+			return stem + "ído"
+		}
 		return stem + "ido"
 	}
 }
