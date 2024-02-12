@@ -17,6 +17,10 @@ func Initialize(r *chi.Mux) {
 		fs.ServeHTTP(res, req)
 	})
 
+	r.Get("/favicon.ico", func(res http.ResponseWriter, req *http.Request) {
+		http.ServeFile(res, req, "./static/favicon.ico")
+	})
+
 	r.Route("/{verb}", func(r chi.Router) {
 		r.Use(middleware.Text)
 		// check if the verb is valid
