@@ -10,9 +10,15 @@ import (
 )
 
 func Initialize(r *chi.Mux) {
-	r.Use(middleware.Text)
+
+	// serve home page static html
+	fs := http.FileServer(http.Dir("./static"))
+	r.Get("/", func(res http.ResponseWriter, req *http.Request) {
+		fs.ServeHTTP(res, req)
+	})
 
 	r.Route("/{verb}", func(r chi.Router) {
+		r.Use(middleware.Text)
 		// check if the verb is valid
 		// current not going to check if the verb is actually a spanish verb, rather just ensure that it ends in ar/er/ir
 		r.Use(middleware.Verb)

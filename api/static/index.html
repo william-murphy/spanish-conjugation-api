@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Verb Conjugator</title>
+</head>
+
+<body>
+
+    <h1>Spanish Verb Conjugator</h1>
+
+    <h3>Instructions</h3>
+    <ul>
+        <li>In the text box below, write a</li>
+        <li>The API will accept two different requests:
+            <ol>
+                <li><code>/{verb}/{tense}/{mood}/{subject}</code></li>
+                <li><code>/{verb}/imperative/{subject}</code></li>
+            </ol>
+            This is because the imperative mood does not really associate with a tense. If your request is not of one of these two forms you will receive a 404 error.
+        </li>
+        <li>You can use any verb in the Spanish language as long as it ends in -ar, -er, or -ir. Do not write the 'se' for reflexive verbs, just leave it off.</li>
+        <li>The moods and their tenses are:
+            <ol>
+                <li>Indicative: conditional, conditionalperfect, conditionalprogressive, future, futureperfect, futureprogressive, imperfect, nearfuture, pastprogressive, pluperfect, present, presentperfect, preterite.</li>
+                <li>Subjunctive: imperfect, pluperfect, present, presentperfect.</li>
+                <li>Imperative</li>
+            </ol>
+        </li>
+        <li>For indicative and subjunctive moods, the subjects are: yo, tu, usted, nosotros, vosotros, ustedes.</li>
+        <li>For the imperative mood, the subjects are: tu, vosotros, usted, ustedes, and nosotros.</li>
+    </ul>
+
+    <form id="conjugation">
+        <label for="request">Enter API Request:</label>
+        <input type="text" id="request" name="request" required>
+        <button type="button" onclick="submitApiRequest()">Conjugate</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        function submitApiRequest() {
+            var server = window.location.protocol + "//" + window.location.host;
+            var request = document.getElementById("request").value;
+
+            var url = server + request;
+
+            fetch(url).then(response => response.text()).then(data => {
+                document.getElementById("result").innerText = data;
+            }).catch(error => {
+                document.getElementById("result").innerText = error;
+            });
+        }
+
+        document.getElementById("conjugation").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                submitApiRequest();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
