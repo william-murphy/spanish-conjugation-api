@@ -5,63 +5,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spanish Verb Conjugator</title>
-    <link rel="icon" type="image/png" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <main>
+        <h1>Spanish Verb Conjugator</h1>
 
-    <h1>Spanish Verb Conjugator</h1>
+        <section>
+            <form id="conjugation">
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="verb" name="verb" placeholder="Spanish Verb" required>
+                    </div>
+                </div>
 
-    <h3>Instructions</h3>
-    <ul>
-        <li>In the text box below, write a</li>
-        <li>The API will accept two different requests:
-            <ol>
-                <li><code>/{verb}/{tense}/{mood}/{subject}</code></li>
-                <li><code>/{verb}/imperative/{subject}</code></li>
-            </ol>
-            This is because the imperative mood does not really associate with a tense. If your request is not of one of these two forms you will receive a 404 error.
-        </li>
-        <li>You can use any verb in the Spanish language as long as it ends in -ar, -er, or -ir. Do not write the 'se' for reflexive verbs, just leave it off.</li>
-        <li>The moods and their tenses are:
-            <ol>
-                <li>Indicative: conditional, conditionalperfect, conditionalprogressive, future, futureperfect, futureprogressive, imperfect, nearfuture, pastprogressive, pluperfect, present, presentperfect, preterite.</li>
-                <li>Subjunctive: imperfect, pluperfect, present, presentperfect.</li>
-                <li>Imperative</li>
-            </ol>
-        </li>
-        <li>For indicative and subjunctive moods, the subjects are: yo, tu, usted, nosotros, vosotros, ustedes.</li>
-        <li>For the imperative mood, the subjects are: tu, vosotros, usted, ustedes, and nosotros.</li>
-    </ul>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mood">Select Mood:</label>
+                        <select id="mood" name="mood" onchange="updateDropdowns()">
+                            <option value="indicative">Indicative</option>
+                            <option value="subjunctive">Subjunctive</option>
+                            <option value="imperative">Imperative</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="tense">Select Tense:</label>
+                        <select id="tense" name="tense"></select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="subject">Select Subject:</label>
+                        <select id="subject" name="subject"></select>
+                    </div>
+                </div>
 
-    <form id="conjugation">
-        <label for="request">Enter API Request:</label>
-        <input type="text" id="request" name="request" style="width: 300px;" value="/tener/present/indicative/yo" required>
-        <button type="button" onclick="submitApiRequest()">Conjugate</button>
-    </form>
-
-    <p id="result"></p>
+                <div class="submit">
+                    <button type="submit">Conjugate</button>
+                </div>
+            </form>
+        </section>
+        
+        <section>
+            <div class="result-box">
+                <span class="result-text" id="result">Result...</span>
+            </div>
+        </section>
+    </main>
 
     <script>
-        function submitApiRequest() {
-            var server = window.location.protocol + "//" + window.location.host;
-            var request = document.getElementById("request").value;
+        const indicativeTenses = [["present", "Present"], ["presentperfect", "Present Perfect"], ["presentprogressive", "Present Progressive"], ["imperfect", "Imperfect"], ["pluperfect", "Pluperfect"], ["pastprogressive", "Past Progressive"], ["preterite", "Preterite"], ["future", "Future"], ["futureperfect", "Future Perfect"], ["futureprogressive", "Future Progressive"], ["nearfuture", "Near Future"], ["conditional", "Conditional"], ["conditionalperfect", "Conditional Perfect"], ["conditionalprogressive", "Conditional Progressive"]];
+        const subjunctiveTenses = [["present", "Present"], ["presentperfect", "Present Perfect"], ["imperfect", "Imperfect"], ["pluperfect", "Pluperfect"]];
 
-            var url = server + request;
+        const subjects = [["yo", "Yo"], ["tu", "Tu"], ["usted", "Usted"], ["nosotros", "Nosotros"], ["vosotros", "Vosotros"], ["ustedes", "Ustedes"]];
+        const imperativeSubjects = subjects.slice(1);
+
+        function updateDropdowns() {
+            const moodDropdown = document.getElementById("mood");
+            const tenseDropdown = document.getElementById("tense");
+            const subjectDropdown = document.getElementById("subject");
+
+            // Clear previous options
+            tenseDropdown.innerHTML = "";
+            subjectDropdown.innerHTML = "";
+
+            // Get selected value from main dropdown
+            const selectedCategory = moodDropdown.value;
+
+            // Populate sub-dropdown based on the selected category
+            if (selectedCategory === "imperative") {
+                addOptions(subjectDropdown, imperativeSubjects);
+                tenseDropdown.disabled = true;
+            } else {
+                tenseDropdown.disabled = false;
+                addOptions(subjectDropdown, subjects);
+                if (selectedCategory === "indicative") {
+                    addOptions(tenseDropdown, indicativeTenses);
+                } else if (selectedCategory === "subjunctive") {
+                    addOptions(tenseDropdown, subjunctiveTenses);
+                }
+            }
+        }
+
+        function addOptions(selectElement, optionsArray) {
+            for (let i = 0; i < optionsArray.length; i++) {
+                const option = document.createElement("option");
+                option.value = optionsArray[i][0];
+                option.text = optionsArray[i][1];
+                selectElement.add(option);
+            }
+        }
+
+        document.getElementById("conjugation").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const verb = document.getElementById("verb").value;
+            const mood = document.getElementById("mood").value;
+            const tense = document.getElementById("tense").value;
+            const subject = document.getElementById("subject").value;
+
+            let url;
+            if (mood === "imperative") {
+                url = `/api/${verb}/imperative/${subject}`;
+            } else {
+                url = `/api/${verb}/${tense}/${mood}/${subject}`;
+            }
 
             fetch(url).then(response => response.text()).then(data => {
                 document.getElementById("result").innerText = data;
             }).catch(error => {
                 document.getElementById("result").innerText = error;
             });
-        }
-
-        document.getElementById("conjugation").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                submitApiRequest();
-            }
         });
+
+        updateDropdowns();
     </script>
 
 </body>
